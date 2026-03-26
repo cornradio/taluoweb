@@ -1,0 +1,377 @@
+:root {
+    --bg-color: #0b0d17;
+    --accent-color: #c9a063;
+    --text-color: #f0ede5;
+    --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    --gold-glow: 0 0 15px rgba(201, 160, 99, 0.5);
+    /* Transition speeds */
+    --transition-fast: 0.3s;
+    --transition-slow: 0.8s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Noto Serif SC', serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    /* Use a simple gradient until the user provides a background */
+    background: radial-gradient(circle at center, #1a1e2b 0%, #0b0d17 100%);
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('https://www.transparenttextures.com/patterns/stardust.png');
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+header {
+    text-align: center;
+    margin-top: 6rem; /* 增加顶部留白 */
+    margin-bottom: 3rem;
+    z-index: 10;
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-family: 'Ma Shan Zheng', cursive;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(201, 160, 99, 0.3);
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    letter-spacing: 2px;
+}
+
+main {
+    width: 100%;
+    max-width: 1200px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+}
+
+.card-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    width: 100%;
+}
+
+.cards-line {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.info-section {
+    display: flex;
+    flex-direction: row; /* Desktop: Side-by-side */
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Card Styling - Desktop Default (LARGE) */
+.card-wrapper-mini {
+    width: 260px;
+    perspective: 1000px;
+    transition: width 0.3s ease;
+}
+
+.card.mini {
+    position: relative;
+    width: 100%;
+    height: 420px;
+    transform-style: preserve-3d;
+    transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card.is-drawn {
+    transform: rotateY(180deg);
+}
+
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 8px;
+    border: 1px solid var(--accent-color);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.card-back {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-back::after {
+    content: "🔮";
+    font-size: 3.5rem; /* Large desktop icon */
+    opacity: 0.5;
+    transition: font-size 0.3s ease;
+}
+
+.card-front {
+    transform: rotateY(180deg);
+    background: #000;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-img.reversed {
+    transform: rotate(180deg);
+}
+
+/* Large Info Styling */
+.card-info-summary {
+    flex: 1; /* Share row equally */
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border-top: 4px solid var(--accent-color); /* Top border looks better in row */
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.6s ease-out;
+}
+
+.card-info-summary.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    margin-bottom: 0.3rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.card-name {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 1.8rem;
+    color: var(--accent-color);
+    margin-bottom: 0.8rem;
+}
+
+.card-meaning-large {
+    font-size: 1.05rem;
+    color: #e2e8f0;
+    line-height: 1.6;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: 1.5rem;
+}
+
+button {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+    font-family: 'Noto Serif SC', serif;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    border: none;
+    outline: none;
+}
+
+.glow-on-hover {
+    background: var(--accent-color);
+    color: #000;
+    font-weight: bold;
+    box-shadow: var(--gold-glow);
+}
+
+.glow-on-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 25px var(--accent-color);
+}
+
+.secondary-btn {
+    background: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+}
+
+.secondary-btn:hover {
+    background: rgba(201, 160, 99, 0.1);
+}
+
+/* Empty placeholder */
+.placeholder {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    opacity: 0.3;
+    font-style: italic;
+}
+
+/* Quick Animation for fade in */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.card-wrapper {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsiveness */
+.ai-prompt-container {
+    margin-top: 4rem;
+    width: 100%;
+    max-width: 800px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(201, 160, 99, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 1s ease-out;
+}
+
+.ai-prompt-container h3 {
+    margin-bottom: 1.5rem;
+    font-family: 'Ma Shan Zheng', cursive;
+    color: var(--accent-color);
+    font-size: 1.8rem;
+}
+
+#ai-prompt-text {
+    width: 100%;
+    height: 180px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    padding: 1.5rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: none;
+    margin-bottom: 1.5rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+#ai-prompt-text:focus {
+    border-color: var(--accent-color);
+}
+
+.ai-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+}
+
+.action-btn {
+    padding: 0.8rem 1.8rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 0.95rem;
+}
+
+#copy-btn {
+    background: var(--accent-color);
+    color: #000;
+}
+
+#copy-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.action-btn.secondary.gemini {
+    background: #4285F4;
+    color: white;
+}
+
+.action-btn.secondary.deepseek {
+    background: #4d6cfa;
+    color: white;
+}
+
+.action-btn.secondary:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+}
+
+/* Responsiveness */
+@media (max-width: 1024px) {
+    .card-wrapper-mini { width: 220px; }
+    .card.mini { height: 350px; }
+}
+
+@media (max-width: 768px) {
+    h1 { font-size: 2.5rem; }
+    .subtitle { font-size: 0.85rem; padding: 0 1.5rem; }
+    .cards-line { gap: 1rem; }
+    .card-wrapper-mini { width: 140px; }
+    .card.mini { height: 220px; }
+    .card-back::after { font-size: 2rem; }
+    
+    .info-section { flex-direction: column; } /* Mobile: Vertical stack */
+    .card-info-summary { border-top-width: 0; border-left: 4px solid var(--accent-color); }
+    
+    .ai-prompt-container { width: 95%; padding: 1.2rem; }
+}
+
+@media (max-width: 480px) {
+    header { margin-top: 3rem; } /* 移动端顶部留白稍作收缩 */
+    h1 { font-size: 2rem; }
+    .cards-line { gap: 0.5rem; margin-bottom: 2rem; }
+    .card-wrapper-mini { width: 30vw; } /* 满屏宽度的三分之一左右 */
+    .card.mini { height: 160px; }
+    .card-back::after { font-size: 1.2rem; }
+    
+    .card-info-summary { padding: 1.2rem; border-left-width: 3px; }
+    .card-name { font-size: 1.4rem; }
+    .card-meaning-large { font-size: 0.95rem; }
+
+    .controls { flex-direction: column; width: 90%; gap: 1rem; }
+    button { width: 100%; padding: 0.8rem; }
+    
+    .ai-actions { flex-direction: column; width: 100%; }
+    .ai-actions .action-btn { width: 100%; margin-bottom: 0.5rem; }
+}

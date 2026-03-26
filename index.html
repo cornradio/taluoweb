@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>塔罗牌三张牌阵 - 神秘之境</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="icon-192.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <header>
+        <h1>塔罗占卜</h1>
+        <p class="subtitle">闭上眼，在心中默念你的问题，然后抽取你的指引</p>
+    </header>
+
+    <main>
+        <div id="card-display" class="card-container">
+            <!-- 占位符或展示抽出的卡片 -->
+        </div>
+
+        <div class="controls">
+            <button id="draw-btn" class="glow-on-hover">开启占卜 (抽取三张)</button>
+            <button id="reset-btn" class="secondary-btn">重新开始</button>
+        </div>
+
+        <div id="ai-section" class="ai-prompt-container" style="display: none;">
+            <h3>AI 解读助手</h3>
+            <textarea id="ai-prompt-text" readonly placeholder="抽卡后将生成解读指令..."></textarea>
+            <div class="ai-actions">
+                <button id="copy-btn" class="action-btn">复制指令</button>
+                <a href="https://gemini.google.com/app" target="_blank" class="action-btn secondary gemini">Gemini</a>
+                <a href="https://chat.deepseek.com/" target="_blank" class="action-btn secondary deepseek">DeepSeek</a>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
