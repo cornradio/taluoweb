@@ -40,6 +40,11 @@ function performDraw() {
         cardWrapper.className = 'card-wrapper-mini';
         cardWrapper.style.animationDelay = `${index * 0.15}s`;
         
+        // 打乱一点：随机微量旋转和垂直偏移
+        const randomRot = (Math.random() * 6) - 3; // -3 to 3 deg
+        const randomY = (Math.random() * 15) - 7.5; // -7.5 to 7.5 px
+        cardWrapper.style.transform = `rotate(${randomRot}deg) translateY(${randomY}px)`;
+        
         const cardInner = document.createElement('div');
         cardInner.className = 'card mini';
         
@@ -57,6 +62,34 @@ function performDraw() {
         cardInner.appendChild(cardBack);
         cardInner.appendChild(cardFront);
         
+        // --- 3D 悬浮跟随效果 ---
+        cardInner.addEventListener('mousemove', (e) => {
+            const rect = cardInner.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            // 计算倾斜角度 (最多 20 度)
+            const rotateX = ((y - centerY) / centerY) * -15; 
+            const rotateY = ((x - centerX) / centerX) * 15;
+            
+            const isDrawn = cardInner.classList.contains('is-drawn');
+            const baseRotateY = isDrawn ? 180 : 0;
+            
+            // 实时响应鼠标
+            cardInner.style.transition = 'transform 0.1s ease';
+            cardInner.style.transform = `rotateX(${rotateX}deg) rotateY(${baseRotateY + rotateY}deg) scale(1.05)`;
+        });
+
+        cardInner.addEventListener('mouseleave', () => {
+            const isDrawn = cardInner.classList.contains('is-drawn');
+            const baseRotateY = isDrawn ? 180 : 0;
+            cardInner.style.transition = 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
+            cardInner.style.transform = `rotateX(0deg) rotateY(${baseRotateY}deg) scale(1)`;
+        });
+
         cardWrapper.appendChild(cardInner);
         cardsLine.appendChild(cardWrapper);
 
