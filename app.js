@@ -12,6 +12,18 @@ const copyBtn = document.getElementById('copy-btn');
 // Current drawing session state
 let currentDraw = [];
 
+// Shuffle Modal Elements
+const shuffleBtn = document.getElementById('shuffle-btn');
+const shuffleModal = document.getElementById('shuffle-modal');
+const shuffleCanvas = document.getElementById('shuffle-canvas');
+const closeShuffleBtn = document.getElementById('close-shuffle-btn');
+const seedDisplay = document.getElementById('current-seed-val');
+
+let userSeed = 0;
+let isDrawing = false;
+let ctx = shuffleCanvas.getContext('2d');
+
+
 /**
  * Perform the drawing of 3 random cards
  */
@@ -25,12 +37,21 @@ function performDraw() {
     const infoSection = document.createElement('div');
     infoSection.className = 'info-section';
 
-    // Pick 3 random cards
-    const shuffled = [...TAROT_CARDS].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 3);
+    // Seeded Shuffle mixing with Time
+    const finalSeed = Date.now() + userSeed;
+    
+    // Simple seeded random generator
+    const seededRandom = () => {
+        // Use a simple sine-based hash for random-like distribution based on seed
+        const x = Math.sin(finalSeed + Math.random()) * 10000;
+        return x - Math.floor(x);
+    };
 
+    const shuffled = [...TAROT_CARDS].sort(() => 0.5 - seededRandom());
+    const selected = shuffled.slice(0, 3);
+    
     currentDraw = selected.map(card => {
-        const isUpright = Math.random() > 0.5;
+        const isUpright = seededRandom() > 0.5;
         return { ...card, isUpright: isUpright };
     });
 
@@ -149,11 +170,70 @@ function performDraw() {
     drawBtn.disabled = true;
     drawBtn.textContent = '卜卦已定';
     drawBtn.style.opacity = '0.5';
+    shuffleBtn.style.display = 'none';
 
     // Generate AI Prompt
     generateAiPrompt();
     aiSection.style.display = 'block';
 }
+
+// --- Shuffle Modal & Canvas Implementation ---
+let fadeInterval;
+
+function initCanvas() {
+    ctx.strokeStyle = '#c9a063';
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.shadowBlur = 10;
+    ctx.shadowColor = '#c9a063';
+    
+    // 启动淡化效果：制造灵动流动的气息
+    if (fadeInterval) cancelAnimationFrame(fadeInterval);
+    function fade() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; // 每次循环叠加一层极薄的黑色
+        ctx.fillRect(0, 0, shuffleCanvas.width, shuffleCanvas.height);
+        fadeInterval = requestAnimationFrame(fade);
+    }
+    fade();
+}
+
+shuffleCanvas.addEventListener('mousedown', (e) => {
+    isDrawing = true;
+    const rect = shuffleCanvas.getBoundingClientRect();
+    ctx.beginPath();
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+});
+
+window.addEventListener('mouseup', () => isDrawing = false);
+
+shuffleCanvas.addEventListener('mousemove', (e) => {
+    if (!isDrawing) return;
+    const rect = shuffleCanvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+
+    // 灵值产生逻辑：采用异或与位移，产生混沌不可预测的数值感
+    const noise = Math.floor(x * y * Math.random() * 100);
+    userSeed = (userSeed ^ noise) >>> 0; 
+    
+    // 显示为 16 进制大写，看起来更像某种能量代码
+    seedDisplay.textContent = '0x' + userSeed.toString(16).toUpperCase().padStart(8, '0');
+});
+
+shuffleBtn.addEventListener('click', () => {
+    shuffleModal.style.display = 'flex';
+    initCanvas();
+});
+
+closeShuffleBtn.addEventListener('click', () => {
+    shuffleModal.style.display = 'none';
+    if (fadeInterval) cancelAnimationFrame(fadeInterval);
+    shuffleBtn.textContent = '灵觉已注入';
+    shuffleBtn.style.opacity = '0.7';
+});
 
 function generateAiPrompt() {
     let prompt = "你好，我刚在塔罗牌阵中随机抽取了三张牌，请作为一名资深的塔罗占卜师帮我深度解读一下：\n\n";
@@ -173,7 +253,13 @@ function resetDraw() {
     drawBtn.disabled = false;
     drawBtn.textContent = '开启占卜 (抽取三张)';
     drawBtn.style.opacity = '1';
+    shuffleBtn.style.display = 'inline-block';
+    shuffleBtn.textContent = '仪式洗牌';
+    shuffleBtn.style.opacity = '1';
     currentDraw = [];
+    userSeed = 0;
+    seedDisplay.textContent = '0';
+    if (ctx) ctx.clearRect(0, 0, shuffleCanvas.width, shuffleCanvas.height);
     aiSection.style.display = 'none';
     aiPromptText.value = '';
 }

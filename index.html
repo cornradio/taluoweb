@@ -24,8 +24,24 @@
         </div>
 
         <div class="controls">
+            <button id="shuffle-btn" class="secondary-btn">仪式洗牌</button>
             <button id="draw-btn" class="glow-on-hover">开启占卜 (抽取三张)</button>
             <button id="reset-btn" class="secondary-btn">重新开始</button>
+        </div>
+
+        <!-- 洗牌仪式弹窗 -->
+        <div id="shuffle-modal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <h3>注入灵觉</h3>
+                <p>在下方区域随心绘画，你的灵性路径将决定牌阵的排布</p>
+                <div class="canvas-container">
+                    <canvas id="shuffle-canvas" width="300" height="300"></canvas>
+                </div>
+                <div class="seed-info">
+                    当前灵值: <span id="current-seed-val">0</span>
+                </div>
+                <button id="close-shuffle-btn" class="glow-on-hover">完成注入</button>
+            </div>
         </div>
 
         <div id="ai-section" class="ai-prompt-container" style="display: none;">
