@@ -93,7 +93,7 @@ function performDraw() {
         cardInner.appendChild(cardFront);
 
         // --- 3D 悬浮跟随效果 & 反光控制 ---
-        cardInner.addEventListener('mousemove', (e) => {
+        cardInner.addEventListener('pointermove', (e) => {
             const rect = cardInner.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
@@ -121,7 +121,7 @@ function performDraw() {
             targetGlare.style.opacity = '1';
         });
 
-        cardInner.addEventListener('mouseleave', () => {
+        cardInner.addEventListener('pointerleave', () => {
             const isDrawn = cardInner.classList.contains('is-drawn');
             const baseRotateY = isDrawn ? 180 : 0;
             cardInner.style.transition = 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)';
@@ -197,16 +197,23 @@ function initCanvas() {
     fade();
 }
 
-shuffleCanvas.addEventListener('mousedown', (e) => {
+shuffleCanvas.addEventListener('pointerdown', (e) => {
     isDrawing = true;
     const rect = shuffleCanvas.getBoundingClientRect();
     ctx.beginPath();
     ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+    // 捕获指针，确保即使手指移出画布范围也能继续接收事件
+    shuffleCanvas.setPointerCapture(e.pointerId);
 });
 
-window.addEventListener('mouseup', () => isDrawing = false);
+shuffleCanvas.addEventListener('pointerup', (e) => {
+    isDrawing = false;
+    shuffleCanvas.releasePointerCapture(e.pointerId);
+});
 
-shuffleCanvas.addEventListener('mousemove', (e) => {
+shuffleCanvas.addEventListener('pointercancel', () => isDrawing = false);
+
+shuffleCanvas.addEventListener('pointermove', (e) => {
     if (!isDrawing) return;
     const rect = shuffleCanvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
