@@ -243,7 +243,7 @@ closeShuffleBtn.addEventListener('click', () => {
 });
 
 function generateAiPrompt() {
-    let prompt = "你好，我刚在塔罗牌阵中随机抽取了三张牌，请作为一名资深的塔罗占卜师帮我深度解读一下：\n\n";
+    let prompt = "你好，我在塔罗牌大阿卡纳卡组中抽取了三张牌，请作为一名资深的塔罗占卜师帮我深度解读一下：\n\n";
     const labels = ["第一张", "第二张", "第三张"];
 
     currentDraw.forEach((card, index) => {
@@ -277,6 +277,31 @@ resetDraw();
 // Event listeners
 drawBtn.addEventListener('click', performDraw);
 resetBtn.addEventListener('click', resetDraw);
+
+// --- 右上角随机数器 ---
+const randomRollBtn = document.getElementById('random-roll-btn');
+const randomNumberDisplay = document.getElementById('random-number-display');
+
+function rollRandomNumber() {
+    randomRollBtn.classList.add('rolling');
+    let ticks = 0;
+    const maxTicks = 14;
+    const interval = setInterval(() => {
+        const n = Math.floor(Math.random() * 100) + 1;
+        randomNumberDisplay.textContent = n;
+        ticks++;
+        if (ticks >= maxTicks) {
+            clearInterval(interval);
+            const finalNum = Math.floor(Math.random() * 100) + 1;
+            randomNumberDisplay.textContent = finalNum;
+            randomRollBtn.classList.remove('rolling');
+            randomRollBtn.classList.add('settled');
+            setTimeout(() => randomRollBtn.classList.remove('settled'), 600);
+        }
+    }, 55);
+}
+
+randomRollBtn.addEventListener('click', rollRandomNumber);
 
 copyBtn.addEventListener('click', () => {
     aiPromptText.select();

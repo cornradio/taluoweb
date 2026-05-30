@@ -8,11 +8,21 @@
     <link rel="icon" href="icon-192.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&family=Cinzel:wght@500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="background-overlay"></div>
-    
+
+    <!-- 神秘水晶球随机数器（右上角悬浮组件） -->
+    <button id="random-roll-btn" class="random-orb" title="点击抽取 1-100 灵数">
+        <span class="orb-glow"></span>
+        <span class="orb-inner">
+            <span id="random-number-display" class="orb-number">?</span>
+            <span class="orb-range">1 · 100</span>
+        </span>
+        <span class="orb-shine"></span>
+    </button>
+
     <header>
         <h1>塔罗占卜</h1>
         <p class="subtitle">闭上眼，在心中默念你的问题，然后抽取你的指引</p>
